@@ -26,6 +26,9 @@ import NewArrivals from "./pages/NewArrivals/NewArrivals";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import BestSellers from "./pages/BestSellers/BestSellers";
+import Testimonials from "./components/Testimonials/Testimonials";
+import TrustedPartners from "./components/TrustedPartners/TrustedPartners";
+import FloatingButtons from "./components/common/FloatingButtons";
 
 import Shop from "./pages/Shop/Shop";
 
@@ -37,8 +40,10 @@ function Home() {
       <BestSeller />
       <PromoSection />
       <NewArrival />
-      <InquiryProducts />
+      {/* <InquiryProducts /> */}
       <WhyFlovr />
+      <Testimonials  />
+      <TrustedPartners />
       <Newsletter />
     </>
   );
@@ -110,6 +115,7 @@ function App() {
               </main>
 
               <Footer />
+              <FloatingButtons />
             </div>
           </BrowserRouter>
         </CartProvider>

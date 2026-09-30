@@ -99,7 +99,7 @@ function NewArrivals() {
         </div>
 
         {newProducts.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+          <div className="grid grid-cols-1 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
             {newProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

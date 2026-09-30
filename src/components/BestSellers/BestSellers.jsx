@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import ProductCard from "../ProductCard/ProductCard";
 import products from "../../data/products";
+import Reveal from "../common/Reveal";
 
 function BestSellers() {
   // Get best sellers and show ONLY 4 on Home
@@ -15,92 +16,86 @@ function BestSellers() {
       <div className="mx-auto max-w-[1500px]">
 
         {/* ================= HEADER ================= */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <Reveal direction="up" duration={900}>
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="mb-3 text-sm font-medium uppercase tracking-[0.28em] text-[#9A542C] md:text-[16px]">
+                Customer Favorites
+              </p>
 
-          <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.28em] text-[#9A542C] md:text-[16px]">
-              Customer Favorites
-            </p>
+              <h2 className="font-serif text-4xl leading-tight text-[#171717] md:text-5xl">
+                Best Sellers
+              </h2>
 
-            <h2 className="font-serif text-4xl leading-tight text-[#171717] md:text-5xl">
-              Best Sellers
-            </h2>
+              <p className="mt-4 max-w-[500px] text-sm leading-6 text-[#6d6259] sm:text-base">
+                The FLOVR essentials our customers love most,
+                chosen for everyday comfort, organization and style.
+              </p>
+            </div>
 
-            <p className="mt-4 max-w-[500px] text-sm leading-6 text-[#6d6259] sm:text-base">
-              The FLOVR essentials our customers love most,
-              chosen for everyday comfort, organization and style.
-            </p>
+            {/* Desktop View All */}
+            <Link
+              to="/best-sellers"
+              className="group hidden items-center gap-2 border-b border-[#171717] pb-1 text-xs font-bold uppercase tracking-[0.16em] text-[#171717] transition-all duration-300 hover:-translate-y-1 md:flex"
+            >
+              View All Best Sellers
+
+              <ArrowRight
+                size={15}
+                strokeWidth={1.5}
+                className="transition-transform duration-300 group-hover:translate-x-1.5"
+              />
+            </Link>
           </div>
-
-          {/* Desktop View All */}
-          <Link
-            to="/best-sellers"
-            className="group hidden items-center gap-2 border-b border-[#171717] pb-1 text-xs font-bold uppercase tracking-[0.16em] text-[#171717] md:flex"
-          >
-            View All Best Sellers
-
-            <ArrowRight
-              size={15}
-              strokeWidth={1.5}
-              className="transition-transform duration-300 group-hover:translate-x-1.5"
-            />
-          </Link>
-
-        </div>
+        </Reveal>
 
         {/* ================= PRODUCTS ================= */}
         {bestProducts.length > 0 ? (
-
-          <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
-
-            {bestProducts.map((product) => (
-              <ProductCard
+          <div className="mt-10 grid grid-cols-1 gap-x-4 gap-y-12 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
+            {bestProducts.map((product, index) => (
+              <Reveal
                 key={product.id}
-                product={product}
-              />
+                direction="up"
+                delay={index * 120}
+                duration={700}
+              >
+                <ProductCard product={product} />
+              </Reveal>
             ))}
-
           </div>
-
         ) : (
+          <Reveal direction="up" duration={700}>
+            <div className="mt-12 flex min-h-[250px] items-center justify-center border border-[#d8c9b8]">
+              <div className="text-center">
+                <p className="font-serif text-2xl text-[#171717]">
+                  Best Sellers Coming Soon
+                </p>
 
-          <div className="mt-12 flex min-h-[250px] items-center justify-center border border-[#d8c9b8]">
-
-            <div className="text-center">
-
-              <p className="font-serif text-2xl text-[#171717]">
-                Best Sellers Coming Soon
-              </p>
-
-              <p className="mt-2 text-sm text-[#777]">
-                Our customer favorites will appear here.
-              </p>
-
+                <p className="mt-2 text-sm text-[#777]">
+                  Our customer favorites will appear here.
+                </p>
+              </div>
             </div>
-
-          </div>
-
+          </Reveal>
         )}
 
         {/* ================= MOBILE VIEW ALL ================= */}
-        <div className="mt-10 flex justify-center md:hidden">
+        <Reveal direction="up" delay={500} duration={600}>
+          <div className="mt-10 flex justify-center md:hidden">
+            <Link
+              to="/best-sellers"
+              className="group flex items-center gap-2 border-b border-[#171717] pb-1 text-xs font-medium uppercase tracking-[0.16em] text-[#171717] transition-all duration-300 hover:-translate-y-1"
+            >
+              View All Best Sellers
 
-          <Link
-            to="/best-sellers"
-            className="group flex items-center gap-2 border-b border-[#171717] pb-1 text-xs font-medium uppercase tracking-[0.16em] text-[#171717]"
-          >
-            View All Best Sellers
-
-            <ArrowRight
-              size={15}
-              strokeWidth={1.5}
-              className="transition-transform duration-300 group-hover:translate-x-1"
-            />
-
-          </Link>
-
-        </div>
-
+              <ArrowRight
+                size={15}
+                strokeWidth={1.5}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

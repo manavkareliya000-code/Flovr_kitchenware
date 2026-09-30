@@ -1,335 +1,689 @@
+// src/pages/Cart/Cart.jsx
+
 import React from "react";
-import { Link } from "react-router-dom";
+
 import {
-  ArrowRight,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  ArrowLeft,
   Minus,
   Plus,
-  ShoppingBag,
   Trash2,
-  Truck,
-  ShieldCheck,
+  ShoppingBag,
+  Package,
+  ArrowRight,
 } from "lucide-react";
+
 import { useCart } from "../../context/CartContext";
 
+/* =========================================================
+   CART PAGE
+========================================================= */
+
 function Cart() {
+  const navigate =
+    useNavigate();
+
   const {
     cartItems,
-    removeFromCart,
     increaseQuantity,
     decreaseQuantity,
+    updateQuantity,
+    removeFromCart,
     clearCart,
+    cartCount,
     cartTotal,
+    cartSavings,
   } = useCart();
 
-  // Original total
-  const totalOriginalPrice = cartItems.reduce(
-    (total, item) => total + (item.originalPrice || item.price) * item.quantity,
-    0,
-  );
+  /* =======================================================
+     FORMAT PRICE
+  ======================================================= */
 
-  // Total savings
-  const totalSavings = totalOriginalPrice - cartTotal;
+  const formatPrice = (
+    price,
+  ) => {
+    return Number(
+      price || 0,
+    ).toLocaleString(
+      "en-IN",
+    );
+  };
 
-  // Delivery
-  const deliveryCharge = cartTotal >= 499 || cartTotal === 0 ? 0 : 49;
+  /* =======================================================
+     EMPTY CART
+  ======================================================= */
 
-  // Final total
-  const finalTotal = cartTotal + deliveryCharge;
-
-  // Empty cart
-  if (cartItems.length === 0) {
+  if (
+    !cartItems ||
+    cartItems.length ===
+      0
+  ) {
     return (
-      <section className="min-h-[70vh] bg-[#F7F1E8] px-4 py-12 md:px-8 md:py-16 lg:px-12">
-        <div className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-3xl border border-[#D9CBBE] bg-[#FFFDFC] px-6 py-14 text-center shadow-sm">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#EFE3D4] text-[#4A3428]">
-            <ShoppingBag size={34} />
+      <div className="min-h-[70vh] bg-[#F8F1E7] px-4 py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#EFE3D4]">
+            <ShoppingBag
+              size={40}
+              className="text-[#A86643]"
+            />
           </div>
 
-          <h1 className="mt-6 text-3xl font-semibold text-[#4A3428]">
-            Your cart is empty
+          <h1 className="mt-6 text-3xl font-bold text-[#4A3428]">
+            Your Cart is
+            Empty
           </h1>
 
-          <p className="mt-3 max-w-md text-sm leading-6 text-[#75675D]">
-            Looks like you haven't added anything to your cart yet. Discover
-            something beautiful for your home.
+          <p className="mt-3 text-[#75675D]">
+            Looks like you
+            haven't added
+            anything to your
+            cart yet.
           </p>
 
           <Link
             to="/shop"
-            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-[#4A3428] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#A86643]"
+            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#4A3428] px-6 py-3 font-semibold text-white transition hover:bg-[#A86643]"
           >
-            Continue Shopping
-            <ArrowRight size={17} />
+            <ShoppingBag
+              size={18}
+            />
+            Continue
+            Shopping
           </Link>
         </div>
-      </section>
+      </div>
     );
   }
 
+  /* =======================================================
+     CHECKOUT
+  ======================================================= */
+
+  const handleCheckout =
+    () => {
+      navigate(
+        "/checkout",
+      );
+    };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
+
   return (
-    <section className="min-h-screen bg-[#F7F1E8] px-3 py-7 sm:px-4 md:px-8 md:py-10 lg:px-12">
-      <div className="mx-auto max-w-7xl">
-        {/* ================= HEADER ================= */}
-        <div className="mb-6 flex flex-col justify-between gap-3 md:mb-8 md:flex-row md:items-end">
+    <div className="min-h-screen bg-[#F8F1E7]">
+      {/* =================================================
+          HEADER
+      ================================================= */}
+
+      <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+        <Link
+          to="/shop"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[#75675D] transition hover:text-[#A86643]"
+        >
+          <ArrowLeft
+            size={18}
+          />
+          Continue
+          Shopping
+        </Link>
+      </div>
+
+      {/* =================================================
+          TITLE
+      ================================================= */}
+
+      <div className="mx-auto max-w-7xl px-4 pb-8 pt-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#A86643] md:text-xs">
-              Your Selection
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A86643]">
+              FLOVR
             </p>
 
-            <h1 className="mt-1 text-2xl font-semibold text-[#4A3428] md:mt-2 md:text-4xl">
+            <h1 className="mt-1 text-3xl font-bold text-[#4A3428] sm:text-4xl">
               Shopping Cart
             </h1>
 
-            <p className="mt-1 text-xs text-[#75675D] md:mt-2 md:text-sm">
-              {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in
-              your cart
+            <p className="mt-2 text-sm text-[#75675D]">
+              {cartCount}{" "}
+              {cartCount ===
+              1
+                ? "item"
+                : "items"}{" "}
+              in your cart
             </p>
           </div>
 
           <button
             type="button"
-            onClick={clearCart}
-            className="flex w-fit items-center gap-2 text-xs font-medium text-[#A86643] transition hover:text-[#4A3428] md:text-sm"
+            onClick={
+              clearCart
+            }
+            className="inline-flex items-center gap-2 self-start rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 sm:self-auto"
           >
-            <Trash2 size={15} />
+            <Trash2
+              size={16}
+            />
             Clear Cart
           </button>
         </div>
+      </div>
 
-        {/* ================= FREE DELIVERY ================= */}
-        <div className="mb-5 flex items-center gap-3 rounded-2xl border border-[#D9CBBE] bg-[#FFFDFC] px-3 py-3 md:mb-6 md:px-4 md:py-4">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EFE3D4] text-[#4A3428] md:h-10 md:w-10">
-            <Truck size={18} />
-          </div>
+      {/* =================================================
+          CART CONTENT
+      ================================================= */}
 
-          <div className="min-w-0">
-            <p className="text-xs font-semibold text-[#4A3428] md:text-sm">
-              {cartTotal >= 499
-                ? "You've unlocked FREE delivery!"
-                : `Add ₹${(499 - cartTotal).toLocaleString(
-                    "en-IN",
-                  )} more for FREE delivery`}
-            </p>
+      <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          {/* =================================================
+              ITEMS
+          ================================================= */}
 
-            <p className="mt-0.5 text-[10px] text-[#75675D] md:text-xs">
-              Delivered safely to your doorstep.
-            </p>
-          </div>
-        </div>
+          <div className="space-y-4">
+            {cartItems.map(
+              (item) => {
+                /*
+                 * =================================================
+                 * SELECTED VARIANT
+                 * =================================================
+                 */
 
-        {/* ================= MAIN GRID ================= */}
-        <div className="grid gap-5 lg:grid-cols-[1fr_380px] lg:gap-6">
-          {/* ================= CART ITEMS ================= */}
-          <div className="space-y-3 md:space-y-4">
-            {cartItems.map((item) => {
-              const itemOriginalPrice = item.originalPrice || item.price;
+                const variant =
+                  item.selectedVariant;
 
-              const itemSavings =
-                (itemOriginalPrice - item.price) * item.quantity;
+                /*
+                 * =================================================
+                 * SELECTED SUB VARIANT
+                 * =================================================
+                 */
 
-              const itemTotal = item.price * item.quantity;
+                const subVariant =
+                  item.selectedSubVariant;
 
-              return (
-                <div
-                  key={item.id}
-                  className="rounded-2xl border border-[#D9CBBE] bg-[#FFFDFC] p-3 shadow-sm transition hover:shadow-md md:p-5"
-                >
-                  {/* SAME HORIZONTAL LAYOUT ON MOBILE + DESKTOP */}
-                  <div className="flex gap-3 md:gap-4">
-                    {/* ================= IMAGE ================= */}
-                    <Link
-                      to={`/product/${item.id}`}
-                      className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#EDE3D7] sm:h-28 sm:w-28 md:h-36 md:w-36"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-full w-full object-cover transition duration-300 hover:scale-105"
-                      />
-                    </Link>
+                /*
+                 * =================================================
+                 * PRODUCT URL
+                 * =================================================
+                 *
+                 * IMPORTANT:
+                 *
+                 * We send selected variant
+                 * IDs in URL.
+                 *
+                 * Example:
+                 *
+                 * /product/2?variant=blue&subVariant=blue-500ml
+                 */
 
-                    {/* ================= PRODUCT INFO ================= */}
-                    <div className="min-w-0 flex-1">
-                      {/* Top */}
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="text-[9px] font-semibold uppercase tracking-wider text-[#A86643] md:text-[10px]">
-                            {item.category}
-                          </p>
+                const productUrl =
+                  `/product/${item.productId || item.id}` +
+                  `?variant=${encodeURIComponent(
+                    variant?.id ||
+                      "",
+                  )}` +
+                  `&subVariant=${encodeURIComponent(
+                    subVariant?.id ||
+                      "",
+                  )}`;
 
-                          <Link to={`/product/${item.id}`}>
-                            <h2 className="mt-1 line-clamp-2 text-[15px] font-semibold leading-5 text-[#4A3428] transition hover:text-[#A86643] md:text-lg md:leading-6">
-                              {item.name}
-                            </h2>
-                          </Link>
-                        </div>
+                const quantity =
+                  Number(
+                    item.quantity,
+                  ) || 1;
 
-                        {/* Remove */}
-                        <button
-                          type="button"
-                          onClick={() => removeFromCart(item.id)}
-                          className="shrink-0 text-[#75675D] transition hover:text-red-600"
-                          aria-label={`Remove ${item.name}`}
-                        >
-                          <Trash2
-                            size={17}
-                            className="md:h-[18px] md:w-[18px]"
-                          />
-                        </button>
-                      </div>
+                const stock =
+                  Number(
+                    item.stock,
+                  ) || 0;
 
-                      {/* ================= PRICE ================= */}
-                      <div className="mt-2 flex flex-wrap items-center gap-1.5 md:gap-2">
-                        <span className="text-base font-bold text-[#4A3428] md:text-lg">
-                          ₹{item.price.toLocaleString("en-IN")}
-                        </span>
+                const price =
+                  Number(
+                    item.price,
+                  ) || 0;
 
-                        {item.originalPrice && (
-                          <span className="text-xs text-[#75675D] line-through md:text-sm">
-                            ₹{item.originalPrice.toLocaleString("en-IN")}
-                          </span>
-                        )}
+                const originalPrice =
+                  Number(
+                    item.originalPrice,
+                  ) || 0;
 
-                        {item.discount && (
-                          <span className="rounded-full bg-[#EFE3D4] px-2 py-1 text-[9px] font-semibold text-[#A86643] md:text-[10px]">
-                            {item.discount}% OFF
-                          </span>
-                        )}
-                      </div>
+                const itemTotal =
+                  price *
+                  quantity;
 
-                      {/* ================= BOTTOM ================= */}
-                      <div className="mt-3 flex items-center justify-between gap-2 md:mt-5">
-                        {/* Quantity */}
-                        <div className="flex h-9 items-center rounded-xl border border-[#D9CBBE] bg-[#F7F1E8] md:h-10">
-                          <button
-                            type="button"
-                            onClick={() => decreaseQuantity(item.id)}
-                            disabled={item.quantity <= 1}
-                            className="flex h-9 w-8 items-center justify-center text-[#4A3428] transition hover:text-[#A86643] disabled:opacity-30 md:h-10 md:w-9"
-                          >
-                            <Minus size={14} />
-                          </button>
+                return (
+                  <div
+                    key={
+                      item.cartItemId
+                    }
+                    className="rounded-2xl border border-[#D9CBBE] bg-[#FFFDFC] p-3 shadow-sm transition hover:shadow-md  "
+                  >
+                    <div className="flex gap-4">
+                      {/* =================================================
+                          IMAGE
+                      ================================================= */}
 
-                          <span className="w-7 text-center text-xs font-semibold text-[#4A3428] md:w-8 md:text-sm">
-                            {item.quantity}
-                          </span>
+                      <Link
+                        to={
+                          productUrl
+                        }
+                        className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-[#EDE3D7] sm:h-36 sm:w-36"
+                      >
+                        <img
+                          src={
+                            item.image ||
+                            item.images?.[0]
+                          }
+                          alt={
+                            item.name
+                          }
+                          className="h-full w-full object-cover transition duration-300 hover:scale-105"
+                        />
+                      </Link>
 
-                          <button
-                            type="button"
-                            onClick={() => increaseQuantity(item.id)}
-                            disabled={item.quantity >= item.stock}
-                            className="flex h-9 w-8 items-center justify-center text-[#4A3428] transition hover:text-[#A86643] disabled:opacity-30 md:h-10 md:w-9"
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
+                      {/* =================================================
+                          PRODUCT INFO
+                      ================================================= */}
 
-                        {/* Item Total */}
-                        <div className="min-w-0 text-right">
-                          <p className="text-[10px] text-[#75675D] md:text-xs">
-                            Item total
-                          </p>
-
-                          <p className="text-base font-bold text-[#4A3428] md:text-lg">
-                            ₹{itemTotal.toLocaleString("en-IN")}
-                          </p>
-
-                          {itemSavings > 0 && (
-                            <p className="whitespace-nowrap text-[10px] font-medium text-green-600 md:text-xs">
-                              You save ₹{itemSavings.toLocaleString("en-IN")}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#A86643]">
+                              {
+                                item.category
+                              }
                             </p>
-                          )}
+
+                            <Link
+                              to={
+                                productUrl
+                              }
+                            >
+                              <h2 className="mt-1 line-clamp-2 text-base font-bold text-[#4A3428] transition hover:text-[#A86643] sm:text-lg">
+                                {
+                                  item.name
+                                }
+                              </h2>
+                            </Link>
+                          </div>
+
+                          {/* DELETE */}
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeFromCart(
+                                item.cartItemId,
+                              )
+                            }
+                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#75675D] transition hover:bg-red-50 hover:text-red-600"
+                            aria-label="Remove product"
+                          >
+                            <Trash2
+                              size={
+                                17
+                              }
+                            />
+                          </button>
                         </div>
+
+                        {/* =================================================
+                            VARIANTS
+                        ================================================= */}
+
+                        {(variant ||
+                          subVariant) && (
+                          <div className="mt-0.5 flex flex-wrap gap-2">
+                            {variant && (
+                              <span className="rounded-lg bg-[#F8F1E7] px-2.5 py-1 text-xs font-medium text-[#4A3428]">
+                                {
+                                  variant.name
+                                }
+                                {variant.value &&
+                                variant.name !==
+                                  variant.value
+                                  ? `: ${variant.value}`
+                                  : ""}
+                              </span>
+                            )}
+
+                            {subVariant && (
+                              <span className="rounded-lg bg-[#F8F1E7] px-2.5 py-1 text-xs font-medium text-[#4A3428]">
+                                {
+                                  subVariant.name
+                                }
+                                {subVariant.value &&
+                                subVariant.name !==
+                                  subVariant.value
+                                  ? `: ${subVariant.value}`
+                                  : ""}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* =================================================
+                            SKU
+                        ================================================= */}
+
+                        {item.sku && (
+                          <p className="mt-2 text-[11px] text-[#75675D]">
+                            SKU:{" "}
+                            {
+                              item.sku
+                            }
+                          </p>
+                        )}
+
+                        {/* =================================================
+                            PRICE
+                        ================================================= */}
+
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          <span className="text-lg font-bold text-[#4A3428]">
+                            ₹
+                            {formatPrice(
+                              price,
+                            )}
+                          </span>
+
+                          {originalPrice >
+                            price && (
+                            <span className="text-xs text-[#75675D] line-through">
+                              ₹
+                              {formatPrice(
+                                originalPrice,
+                              )}
+                            </span>
+                          )}
+
+                          {item.discount >
+                            0 && (
+                            <span className="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
+                              {
+                                item.discount
+                              }
+                              % OFF
+                            </span>
+                          )}
+                          {stock >
+                          0 && (
+                          <p
+                            className={`ml-3 text-xs font-medium ${
+                              stock <=
+                              5
+                                ? "text-red-600"
+                                : "text-green-700"
+                            }`}
+                          >
+                            {stock <=
+                            5
+                              ? `Only ${stock} left`
+                              : "In stock"}
+                          </p>
+                        )}
+                        </div>
+
+                        {/* =================================================
+                            BOTTOM
+                        ================================================= */}
+
+                        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          {/* QUANTITY */}
+
+                          <div className="flex h-10 w-fit items-center rounded-lg border border-[#D9CBBE] bg-white">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                decreaseQuantity(
+                                  item.cartItemId,
+                                )
+                              }
+                              disabled={
+                                quantity <=
+                                1
+                              }
+                              className="flex h-full w-10 items-center justify-center text-[#4A3428] transition hover:text-[#A86643] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <Minus
+                                size={
+                                  15
+                                }
+                              />
+                            </button>
+
+                            <span className="w-9 text-center text-sm font-semibold text-[#4A3428]">
+                              {
+                                quantity
+                              }
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                increaseQuantity(
+                                  item.cartItemId,
+                                )
+                              }
+                              disabled={
+                                stock >
+                                  0 &&
+                                quantity >=
+                                  stock
+                              }
+                              className="flex h-full w-10 items-center justify-center text-[#4A3428] transition hover:text-[#A86643] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <Plus
+                                size={
+                                  15
+                                }
+                              />
+                            </button>
+                          </div>
+
+                          {/* ITEM TOTAL */}
+
+                          <div className="text-left sm:text-right">
+                            <p className="text-xs text-[#75675D]">
+                              Item
+                              Total
+                            </p>
+
+                            <p className="text-lg font-bold text-[#4A3428]">
+                              ₹
+                              {formatPrice(
+                                itemTotal,
+                              )}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* =================================================
+                            STOCK
+                        ================================================= */}
+
+                        
                       </div>
                     </div>
+
+                    {/* =================================================
+                        VIEW PRODUCT
+                    ================================================= */}
+
+                    {/* <div className="mt-4 border-t border-[#E8DDD3] pt-3">
+                      <Link
+                        to={
+                          productUrl
+                        }
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#A86643] transition hover:text-[#4A3428]"
+                      >
+                        View product
+                        <ArrowRight
+                          size={
+                            14
+                          }
+                        />
+                      </Link>
+                    </div> */}
                   </div>
-                </div>
-              );
-            })}
+                );
+              },
+            )}
           </div>
 
-          {/* ================= ORDER SUMMARY ================= */}
-          <div className="h-fit lg:sticky lg:top-24">
-            <div className="rounded-2xl border border-[#D9CBBE] bg-[#FFFDFC] p-4 shadow-sm md:p-6">
-              <h2 className="text-lg font-semibold text-[#4A3428] md:text-xl">
+          {/* =================================================
+              ORDER SUMMARY
+          ================================================= */}
+
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-2xl border border-[#D9CBBE] bg-[#FFFDFC] p-5 shadow-sm sm:p-6">
+              <h2 className="text-xl font-bold text-[#4A3428]">
                 Order Summary
               </h2>
 
-              <div className="mt-5 space-y-3 md:mt-6 md:space-y-4">
-                {/* Original */}
-                <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-[#75675D]">Original price</span>
+              {/* =================================================
+                  ITEMS
+              ================================================= */}
+
+              <div className="mt-5 space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-[#75675D]">
+                    Items
+                  </span>
 
                   <span className="font-medium text-[#4A3428]">
-                    ₹{totalOriginalPrice.toLocaleString("en-IN")}
+                    {
+                      cartCount
+                    }
                   </span>
                 </div>
 
-                {/* Savings */}
-                <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-[#75675D]">Product savings</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-[#75675D]">
+                    Subtotal
+                  </span>
 
-                  <span className="font-medium text-green-600">
-                    - ₹{totalSavings.toLocaleString("en-IN")}
+                  <span className="font-medium text-[#4A3428]">
+                    ₹
+                    {formatPrice(
+                      cartTotal,
+                    )}
                   </span>
                 </div>
 
-                {/* Delivery */}
-                <div className="flex justify-between gap-4 text-sm">
-                  <span className="text-[#75675D]">Delivery</span>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-[#75675D]">
+                    Delivery
+                  </span>
 
-                  <span className="font-medium text-green-600">
-                    {deliveryCharge === 0 ? "FREE" : `₹${deliveryCharge}`}
+                  <span className="font-semibold text-green-700">
+                    FREE
                   </span>
                 </div>
 
-                {/* Total */}
-                <div className="border-t border-[#D9CBBE] pt-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="font-semibold text-[#4A3428]">Total</span>
+                {cartSavings >
+                  0 && (
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-[#75675D]">
+                      You Save
+                    </span>
 
-                    <span className="text-xl font-bold text-[#4A3428] md:text-2xl">
-                      ₹{finalTotal.toLocaleString("en-IN")}
+                    <span className="font-semibold text-green-700">
+                      ₹
+                      {formatPrice(
+                        cartSavings,
+                      )}
                     </span>
                   </div>
-                </div>
+                )}
               </div>
 
-              {/* Savings */}
-              {totalSavings > 0 && (
-                <div className="mt-4 rounded-xl bg-[#EFE3D4] px-3 py-3 text-center md:mt-5 md:px-4">
-                  <p className="text-xs font-semibold text-[#4A3428] md:text-sm">
-                    You're saving ₹{totalSavings.toLocaleString("en-IN")}
-                  </p>
-                </div>
-              )}
+              {/* =================================================
+                  DIVIDER
+              ================================================= */}
 
-              {/* Checkout */}
-              <Link
-                to="/checkout"
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#4A3428] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[#A86643] md:mt-5"
+              <div className="my-5 border-t border-[#D9CBBE]" />
+
+              {/* =================================================
+                  TOTAL
+              ================================================= */}
+
+              <div className="flex items-center justify-between">
+                <span className="text-base font-semibold text-[#4A3428]">
+                  Total
+                </span>
+
+                <span className="text-2xl font-bold text-[#4A3428]">
+                  ₹
+                  {formatPrice(
+                    cartTotal,
+                  )}
+                </span>
+              </div>
+
+              {/* =================================================
+                  CHECKOUT
+              ================================================= */}
+
+              <button
+                type="button"
+                onClick={
+                  handleCheckout
+                }
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#4A3428] px-5 py-3.5 font-semibold text-white transition hover:bg-[#A86643]"
               >
-                Proceed to Checkout
-                <ArrowRight size={18} />
-              </Link>   
-              {/* Continue */}
+                Proceed to
+                Checkout
+                <ArrowRight
+                  size={18}
+                />
+              </button>
+
+              {/* =================================================
+                  CONTINUE SHOPPING
+              ================================================= */}
+
               <Link
                 to="/shop"
-                className="mt-3 flex w-full items-center justify-center rounded-xl border border-[#D9CBBE] bg-[#FFFDFC] px-5 py-3 text-sm font-medium text-[#4A3428] transition hover:border-[#A86643] hover:text-[#A86643]"
+                className="mt-2 flex w-full items-center justify-center rounded-xl border border-[#D9CBBE] bg-white px-5 py-3 text-sm font-semibold text-[#4A3428] transition hover:border-[#A86643] hover:text-[#A86643]"
               >
-                Continue Shopping
+                Continue
+                Shopping
               </Link>
 
-              {/* Secure */}
-              <div className="mt-5 flex items-center justify-center gap-2 border-t border-[#D9CBBE] pt-4 text-[10px] text-[#75675D] md:mt-6 md:pt-5 md:text-xs">
-                <ShieldCheck size={15} />
-                Secure & safe checkout
+              {/* =================================================
+                  SECURE INFO
+              ================================================= */}
+
+              <div className="mt-6 flex items-start gap-3 rounded-xl bg-[#F8F1E7] p-4">
+                <Package
+                  size={20}
+                  className="mt-0.5 shrink-0 text-[#A86643]"
+                />
+
+                <div>
+                  <p className="text-sm font-semibold text-[#4A3428]">
+                    Secure
+                    Checkout
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-[#75675D]">
+                    Your selected
+                    variants and
+                    quantities are
+                    saved securely
+                    in your cart.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 

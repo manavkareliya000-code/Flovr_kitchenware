@@ -64,10 +64,10 @@ function About() {
   return (
     <main className="bg-[#F7F1E8] text-[#4A3428]">
       {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid min-h-[520px] max-w-[1500px] grid-cols-1 lg:grid-cols-2">
+      <section className="relative overflow-hidden px-5 py-6 pt-16 sm:px-8 md:py-20 lg:px-10 lg:py-2">
+        <div className="mx-auto grid max-w-[1500px] grid-cols-1 lg:grid-cols-2">
           {/* Content */}
-          <div className="flex items-start px-5 py-16 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+          <div className="flex items-center justify-center">
             <div className="max-w-xl">
               <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#A86643]">
                 About FLOVR
@@ -97,11 +97,11 @@ function About() {
           </div>
 
           {/* Image */}
-          <div className="relative overflow-hidden lg:px-10 lg:pb-24 lg:mt-10">
+          <div className="relative overflow-hidden hidden lg:block flex items-center lg:pb-24 lg:mt-1">
             <img
               src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85"
               alt="Modern FLOVR home"
-              className="h-full w-full h-full aspect-[4/3]   rounded-3xl object-cover"
+              className=" w-full h-full aspect-[4/3] rounded-3xl object-cover"
             />
 
             <div className="absolute inset-0 bg-gradient-to-r from-[#F7F1E8]/20 to-transparent" />
